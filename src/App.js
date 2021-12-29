@@ -1,24 +1,23 @@
-import logo from './logo.svg';
+import ModeContext from './ModeContext';
+import { useState } from 'react';
 import './App.css';
+import ModeSwitcher from './ModeSwitcher';
 
 function App() {
+  const [isDark, setIsDark] = useState(JSON.parse(localStorage.getItem('mode')) === true ? true : false);
+  const toggle = () => {
+    const chosenMode = !isDark
+    setIsDark(chosenMode)
+    localStorage.setItem('mode', chosenMode)
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ModeContext.Provider value={{ isDark, toggle }}>
+      <div className="App">
+        <header className={`App-header${isDark ? '-dark' : ''}`}>
+          <ModeSwitcher />
+        </header>
+      </div>
+    </ModeContext.Provider>
   );
 }
 
